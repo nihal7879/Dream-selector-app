@@ -13,7 +13,7 @@ import SafeImage from './SafeImage';
 import Reveal from './Reveal';
 
 const STATS = [
-  { value: 5, suffix: '+', label: 'Years of expertise' },
+  { value: 5, suffix: '+', label: 'Years experience' },
   { value: 240, suffix: '+', label: 'Projects launched' },
   { value: 12, suffix: 'M', label: 'Sq ft visualized' },
   { value: 38, suffix: '%', label: 'Faster close rate' },
