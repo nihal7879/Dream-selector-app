@@ -6,11 +6,12 @@ export function useSmoothScroll() {
     document.documentElement.classList.add('lenis', 'lenis-smooth');
 
     const lenis = new Lenis({
-      duration: 1.05,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.2,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
-      wheelMultiplier: 1.15,
-      touchMultiplier: 1.8,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.6,
+      lerp: 0.08,
     });
 
     let frame = 0;
@@ -25,9 +26,13 @@ export function useSmoothScroll() {
       if (!target || !(target instanceof HTMLAnchorElement)) return;
       const id = target.getAttribute('href');
       if (!id || id === '#') return;
+      e.preventDefault();
+      if (id === '#home' || id === '#top') {
+        lenis.scrollTo(0, { duration: 1.2 });
+        return;
+      }
       const el = document.querySelector(id);
       if (!el || !(el instanceof HTMLElement)) return;
-      e.preventDefault();
       lenis.scrollTo(el, { offset: -90, duration: 1.2 });
     };
 

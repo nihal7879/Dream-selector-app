@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import HeroSlideshow from './components/HeroSlideshow';
-import VerticalGlassStack from './components/VerticalGlassStack';
 import Navbar from './components/Navbar';
 import Reveal from './components/Reveal';
 import SafeImage from './components/SafeImage';
@@ -101,118 +100,7 @@ export default function App() {
       <Navbar />
       <HeroSlideshow />
 
-      <VerticalGlassStack />
-
       <CinematicServices services={SERVICES} />
-
-      <Scene variant="dark" className="gallery-scene">
-        <section className="gallery">
-          <div className="gallery__backdrop" aria-hidden="true">BUILT</div>
-          <div className="gallery__header-row">
-            <Reveal className="gallery__header">
-              <p className="gallery__eyebrow">
-                <i />
-                Featured Work
-              </p>
-              <h2>
-                <SplitHeading text="Built environments" />
-              </h2>
-              <p className="gallery__sub">
-                Spaces we help bring to market — from concept to keys-in-hand.
-              </p>
-            </Reveal>
-            <Reveal delay={0.2} className="gallery__meta">
-              <div className="gallery__meta-row">
-                <span className="gallery__meta-num">240+</span>
-                <span className="gallery__meta-label">Projects launched</span>
-              </div>
-              <div className="gallery__meta-row">
-                <span className="gallery__meta-num">12M</span>
-                <span className="gallery__meta-label">Sq ft visualized</span>
-              </div>
-              <div className="gallery__meta-row">
-                <span className="gallery__meta-num">38%</span>
-                <span className="gallery__meta-label">Faster close rate</span>
-              </div>
-            </Reveal>
-          </div>
-
-          <div className="gallery__grid">
-            {IMAGES.gallery.map((item, i) => {
-              const speed = [0.55, -0.35, 0.4, -0.5][i % 4];
-              const liftClass = i % 2 === 0 ? 'gallery__lift gallery__lift--up' : 'gallery__lift gallery__lift--down';
-              const tags = ['Residential', 'Interior', 'Mixed-use', 'Hospitality'];
-              return (
-                <Reveal key={item.src} delay={i * 0.06}>
-                  <ParallaxLayer speed={speed} className="gallery__parallax">
-                    <div className={liftClass}>
-                      <motion.div
-                        className="gallery__cell"
-                        whileHover="hover"
-                        initial="rest"
-                        animate="rest"
-                        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                      >
-                        <motion.div
-                          className="gallery__zoom"
-                          variants={{ rest: { scale: 1 }, hover: { scale: 1.1 } }}
-                          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                          <SafeImage
-                            src={item.src}
-                            alt={item.alt}
-                            className="gallery__img"
-                            fallback={item.fallback}
-                          />
-                        </motion.div>
-                        <motion.div
-                          className="gallery__veil"
-                          variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
-                          transition={{ duration: 0.35 }}
-                        />
-                        <span className="gallery__index">{String(i + 1).padStart(2, '0')}</span>
-                        <motion.div
-                          className="gallery__caption"
-                          variants={{
-                            rest: { y: 24, opacity: 0 },
-                            hover: { y: 0, opacity: 1 },
-                          }}
-                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                          <span className="gallery__tag">{tags[i % tags.length]}</span>
-                          <h3>{item.alt}</h3>
-                          <span className="gallery__view">
-                            View Project <i aria-hidden="true">→</i>
-                          </span>
-                        </motion.div>
-                      </motion.div>
-                    </div>
-                  </ParallaxLayer>
-                </Reveal>
-              );
-            })}
-          </div>
-
-          <div className="gallery__marquee" aria-hidden="true">
-            <motion.div
-              className="gallery__marquee-track"
-              animate={{ x: ['0%', '-50%'] }}
-              transition={{ duration: 32, repeat: Infinity, ease: 'linear' }}
-            >
-              {[...Array(2)].flatMap((_, copy) =>
-                ['Residential', 'Commercial', 'Mixed-use', 'Hospitality', 'Retail', 'Master-plan', 'Luxury'].map(
-                  (t, i) => (
-                    <span key={`${copy}-${i}`} className="gallery__marquee-item">
-                      <em>◆</em>
-                      {t}
-                    </span>
-                  ),
-                ),
-              )}
-            </motion.div>
-          </div>
-        </section>
-      </Scene>
 
       <Scene id="about" variant="cream">
         <AboutInteractive />

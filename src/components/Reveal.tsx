@@ -4,8 +4,8 @@ import type { ReactNode } from 'react';
 const ease = [0.16, 1, 0.3, 1] as const;
 
 const variants: Variants = {
-  hidden: { opacity: 0, y: 56, filter: 'blur(8px)' },
-  visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  hidden: { opacity: 0, y: 32 },
+  visible: { opacity: 1, y: 0 },
 };
 
 type Props = {
@@ -20,8 +20,8 @@ export default function Reveal({ children, className = '', delay = 0 }: Props) {
       className={className}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '-60px', amount: 0.25 }}
-      transition={{ duration: 0.65, delay, ease }}
+      viewport={{ once: true, margin: '-80px', amount: 0.2 }}
+      transition={{ duration: 0.55, delay, ease }}
       variants={variants}
     >
       {children}

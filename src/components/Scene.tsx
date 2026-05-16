@@ -13,16 +13,14 @@ export default function Scene({ children, className = '', id, variant = 'light' 
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
 
-  const y = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [80, 0, 0, -60]);
-  const opacity = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0, 1, 1, 0.85]);
-  const scale = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.96, 1, 1, 0.98]);
+  const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0.6, 1, 1, 0.85]);
 
   return (
     <motion.section
       ref={ref}
       id={id}
       className={`scene scene--${variant} ${className}`}
-      style={{ y, opacity, scale }}
+      style={{ opacity }}
     >
       <SceneWipe progress={scrollYProgress} />
       {children}
