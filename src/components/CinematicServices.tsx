@@ -112,9 +112,6 @@ function ChapterText({
   // Container only handles the exit fade so individual words/blocks can stagger in
   const containerOpacity = useTransform(progress, [start, peakStart, peakEnd, end], [0, 1, 1, 0]);
 
-  const indexOpacity = useTransform(progress, [start, start + span * 0.08, peakEnd, end], [0, 1, 1, 0]);
-  const indexY = useTransform(progress, [start, start + span * 0.12], [24, 0]);
-
   const descOpacity = useTransform(progress, [start + span * 0.55, start + span * 0.7, peakEnd, end], [0, 1, 1, 0]);
   const descY = useTransform(progress, [start + span * 0.55, start + span * 0.7], [24, 0]);
 
@@ -135,9 +132,6 @@ function ChapterText({
 
   return (
     <motion.div className="cinema__text" style={{ opacity: containerOpacity }}>
-      <motion.span className="cinema__index" style={{ opacity: indexOpacity, y: indexY }}>
-        {String(index + 1).padStart(2, '0')}
-      </motion.span>
       <h3 className="cinema__title">
         {tokens.map((tok, i) => {
           if (tok.trim().length === 0) {
@@ -194,12 +188,10 @@ function ChapterWord({
 }) {
   const opacity = useTransform(progress, [wordStart, wordEnd, fadeStart, fadeEnd], [0, 1, 1, 0]);
   const y = useTransform(progress, [wordStart, wordEnd, fadeStart, fadeEnd], ['115%', '0%', '0%', '-40%']);
-  const blur = useTransform(progress, [wordStart, wordEnd, fadeStart, fadeEnd], [16, 0, 0, 12]);
-  const filter = useTransform(blur, (b) => `blur(${b}px)`);
 
   return (
     <span className="cinema__word-mask">
-      <motion.span className="cinema__word" style={{ opacity, y, filter }}>
+      <motion.span className="cinema__word" style={{ opacity, y }}>
         {word}
       </motion.span>
     </span>

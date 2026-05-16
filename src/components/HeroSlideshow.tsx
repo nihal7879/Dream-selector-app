@@ -91,6 +91,7 @@ export default function HeroSlideshow() {
                     alt={slide.label}
                     className="hero__ken-img"
                     fallback={slide.fallback}
+                    priority={active === 0}
                   />
                 </motion.div>
               </motion.div>

@@ -1,5 +1,5 @@
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const LINKS = [
   { href: '#home', label: 'Home' },
@@ -13,10 +13,21 @@ const SECTION_IDS = LINKS.map((l) => l.href.replace('#', ''));
 
 export default function Navbar() {
   const { scrollY } = useScroll();
-  const [y, setY] = useState(0);
+  const [navState, setNavState] = useState<{ top: boolean; glass: boolean; solid: boolean }>({
+    top: true,
+    glass: false,
+    solid: false,
+  });
   const [active, setActive] = useState<string>('home');
+  const lastStateRef = useRef('top');
 
-  useMotionValueEvent(scrollY, 'change', (latest) => setY(latest));
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const vh = window.innerHeight;
+    const next = latest <= 40 ? 'top' : latest < vh * 0.85 ? 'glass' : 'solid';
+    if (next === lastStateRef.current) return;
+    lastStateRef.current = next;
+    setNavState({ top: next === 'top', glass: next === 'glass', solid: next === 'solid' });
+  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,24 +51,12 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 900;
-  const glass = y > 40 && y < vh * 0.85;
-  const solid = y >= vh * 0.85;
+  const { top, glass, solid } = navState;
 
   return (
-    <motion.header
+    <header
       id="home"
-      className={`nav ${glass ? 'nav--glass' : ''} ${solid ? 'nav--solid' : ''} ${y <= 40 ? 'nav--top' : ''}`}
-      initial={false}
-      animate={{
-        backgroundColor: solid ? 'rgba(0,0,0,1)' : glass ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0)',
-        backdropFilter: glass ? 'blur(20px) saturate(180%)' : 'none',
-        WebkitBackdropFilter: glass ? 'blur(20px) saturate(180%)' : 'none',
-        borderBottomWidth: glass || solid ? 1 : 0,
-        borderBottomColor: glass ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0)',
-        boxShadow: solid ? '0 8px 32px rgba(0,0,0,0.4)' : 'none',
-      }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      className={`nav ${glass ? 'nav--glass' : ''} ${solid ? 'nav--solid' : ''} ${top ? 'nav--top' : ''}`}
     >
       <motion.a href="#home" className="nav__logo" whileHover={{ opacity: 0.9 }} transition={{ duration: 0.15 }}>
         <span className="nav__mark" aria-hidden="true">
@@ -114,6 +113,6 @@ export default function Navbar() {
       <a href="#contact" className="nav__cta-mobile">
         Connect
       </a>
-    </motion.header>
+    </header>
   );
 }

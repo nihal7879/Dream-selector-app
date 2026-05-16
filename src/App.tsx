@@ -6,6 +6,8 @@ import SafeImage from './components/SafeImage';
 import Scene, { ParallaxLayer } from './components/Scene';
 import CinematicServices from './components/CinematicServices';
 import AboutInteractive from './components/AboutInteractive';
+import OurService from './components/OurService';
+import ClientReviews from './components/ClientReviews';
 import { IMAGES } from './lib/images';
 
 function SplitHeading({ text }: { text: string }) {
@@ -106,85 +108,22 @@ export default function App() {
         <AboutInteractive />
       </Scene>
 
-      <Scene id="services" variant="dark">
-        <section className="our-service">
-          <div className="our-service__bg" aria-hidden="true" />
-          <Reveal>
-            <p className="panel__eyebrow our-service__eyebrow">Our Service</p>
-            <h2 className="our-service__heading">
-              Powering property success from <em>first sketch</em> to <em>final signature.</em>
-            </h2>
-          </Reveal>
-          <div className="our-service__grid">
-            <ParallaxLayer speed={0.18} className="our-service__col">
-              <Reveal delay={0.05}>
-                <p>
-                  Whether you’re building the future or closing the next big deal, DreamSelector is
-                  your all-in-one digital engine for smarter real estate operations.
-                </p>
-                <p>
-                  From concept to keys-in-hand, our platform helps developers and agents stay ahead
-                  with tools that accelerate sales, simplify leasing, and automate property
-                  management — so you can focus on growth.
-                </p>
-              </Reveal>
-            </ParallaxLayer>
-            <ParallaxLayer speed={-0.12} className="our-service__col">
-              <Reveal delay={0.12}>
-                <p>
-                  Designed for deal-makers and vision-builders, DreamSelector streamlines your entire
-                  workflow with intuitive features that drive results across every phase of the
-                  property lifecycle.
-                </p>
-                <div className="our-service__pitch">
-                  <p className="our-service__pitch-q">
-                    Ready to elevate your portfolio or boost your pipeline?
-                  </p>
-                  <p className="our-service__pitch-a">
-                    Let’s make it happen — <em>faster, smoother, smarter.</em>
-                  </p>
-                </div>
-              </Reveal>
-            </ParallaxLayer>
-          </div>
-        </section>
+      <Scene variant="dark">
+        <OurService />
       </Scene>
 
-      <Scene id="cases" variant="cream">
-        <section className="panel panel--cases">
-          <Reveal>
-            <p className="panel__eyebrow panel__eyebrow--light">Client Reviews</p>
-            <h2 className="panel__title panel__title--dark">Read reviews from trusted clients.</h2>
-          </Reveal>
-          <div className="cases-grid cases-grid--reviews cases-grid--four">
-            {CASES.map((c, i) => (
-              <Reveal key={c.title} delay={i * 0.06}>
-                <motion.article
-                  className="review-card"
-                  whileHover={{ y: -8 }}
-                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <span className="review-card__quote" aria-hidden="true">“</span>
-                  <p className="review-card__body">{c.quote}</p>
-                  <div className="review-card__person">
-                    <div className="review-card__avatar">
-                      <SafeImage src={c.src} alt={c.title} fallback={c.fallback} />
-                    </div>
-                    <div>
-                      <h3>{c.title}</h3>
-                      <p>{c.tag}</p>
-                      <div className="review-card__stars" aria-label="5 star rating">
-                        ★★★★★
-                      </div>
-                    </div>
-                  </div>
-                </motion.article>
-              </Reveal>
-            ))}
-          </div>
-        </section>
+      <Scene variant="cream">
+        <ClientReviews
+          reviews={CASES.map((c) => ({
+            name: c.title,
+            role: c.tag,
+            quote: c.quote,
+            src: c.src,
+            alt: c.alt,
+            fallback: c.fallback,
+          }))}
+        />
       </Scene>
-
       <Scene id="contact" variant="dark">
         <section className="contact">
           <div className="contact__orbs" aria-hidden="true">
