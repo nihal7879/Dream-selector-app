@@ -67,7 +67,7 @@ export default function Scrollbar() {
         }`}
         style={{ top, height: thumbHeight }}
         animate={{
-          width: expanded ? 5 : 3,
+          width: expanded ? 3 : 2,
           opacity: visible ? 1 : 0.55,
         }}
         transition={{ width: { duration: 0.32, ease: [0.16, 1, 0.3, 1] }, opacity: { duration: 0.4 } }}
