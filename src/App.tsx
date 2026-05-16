@@ -5,25 +5,61 @@ import Navbar from './components/Navbar';
 import Reveal from './components/Reveal';
 import SafeImage from './components/SafeImage';
 import Scene, { ParallaxLayer } from './components/Scene';
+import CinematicServices from './components/CinematicServices';
+import AboutInteractive from './components/AboutInteractive';
 import { IMAGES } from './lib/images';
 
-const SERVICES = [
+function SplitHeading({ text }: { text: string }) {
+  const words = text.split(' ');
+  return (
+    <span className="split-heading" aria-label={text}>
+      {words.map((w, i) => (
+        <span key={`${w}-${i}`} className="split-heading__mask">
+          <motion.span
+            className="split-heading__word"
+            initial={{ y: '110%', opacity: 0 }}
+            whileInView={{ y: '0%', opacity: 1 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{
+              duration: 0.7,
+              ease: [0.16, 1, 0.3, 1],
+              delay: i * 0.08,
+            }}
+          >
+            {w}
+            {i < words.length - 1 ? ' ' : ''}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+type Service = {
+  title: string;
+  desc: string;
+  src: string;
+  alt: string;
+  fallback: string;
+};
+
+const SERVICES: Service[] = [
   {
     title: 'Visualize Before You Build.',
     desc:
-      'Let clients experience your property before it’s even constructed. Immersive previews, virtual layouts, and smart project navigation help developers showcase projects early — boosting buyer confidence and accelerating decisions.',
+      'Let clients experience your property before it’s even constructed. With immersive previews, virtual layouts, and smart project navigation, DreamSelector helps developers showcase projects early — boosting buyer confidence and accelerating decisions.',
     ...IMAGES.services[0],
   },
   {
     title: 'Automate. Manage. Grow.',
     desc:
-      'From lead capture to lease signing — streamline your sales and rental operations with intelligent automation. Our platform handles the details so you can focus on what matters: faster deals, fewer delays, higher returns.',
+      'From lead capture to lease signing — streamline your sales and rental process with intelligent automation. Our platform handles the details so you can focus on what matters: faster deals, fewer delays, and higher returns.',
     ...IMAGES.services[1],
   },
   {
     title: 'Insights that drive action.',
     desc:
-      'Understand what buyers want and when they want it. DreamSelector tracks views, interest, and activity across units — real-time data to refine your sales strategy and boost conversions with confidence.',
+      'Understand what buyers want and when they want it. DreamSelector tracks views, interest, and activity across units, giving you real-time data to refine your sales strategy and boost conversions with confidence.',
     ...IMAGES.services[2],
   },
 ];
@@ -38,7 +74,7 @@ const CASES = [
   },
   {
     title: 'Rebecca William',
-    tag: 'Partner · Property Development, Oslo',
+    tag: 'Partner, Property Development Firm, Oslo',
     quote:
       'DreamSelector understood our needs from the very first meeting. With their user-friendly platform, we’ve made the entire sales process much more transparent — both for us and our clients.',
     ...IMAGES.cases[1],
@@ -50,6 +86,13 @@ const CASES = [
       'The support team at DreamSelector is truly exceptional. Fast, competent, and genuinely invested in our success. It feels like a partnership, not just a product.',
     ...IMAGES.cases[2],
   },
+  {
+    title: 'Daniel',
+    tag: 'Sales Director',
+    quote:
+      'After implementing DreamSelector’s system, we experienced a significant increase in rental conversion rates. It’s been a game-changer.',
+    ...IMAGES.cases[3],
+  },
 ];
 
 export default function App() {
@@ -60,50 +103,60 @@ export default function App() {
 
       <VerticalGlassStack />
 
-      <Scene id="what-we-do" variant="cream">
-        <section className="split">
-          <ParallaxLayer speed={0.25}>
-            <Reveal>
-              <p className="split__label">
-                <i />
-                Our Service
-              </p>
-            </Reveal>
-          </ParallaxLayer>
-          <ParallaxLayer speed={-0.2}>
-            <Reveal delay={0.08}>
-              <p className="split__body">
-                Powering property success from first sketch to final signature — DreamSelector is your
-                all-in-one digital engine for smarter real estate operations.
-              </p>
-            </Reveal>
-          </ParallaxLayer>
-        </section>
-      </Scene>
+      <CinematicServices services={SERVICES} />
 
       <Scene variant="dark" className="gallery-scene">
         <section className="gallery">
-          <Reveal className="gallery__header">
-            <h2>Built environments</h2>
-            <p>Spaces we help bring to market — from concept to keys-in-hand.</p>
-          </Reveal>
+          <div className="gallery__backdrop" aria-hidden="true">BUILT</div>
+          <div className="gallery__header-row">
+            <Reveal className="gallery__header">
+              <p className="gallery__eyebrow">
+                <i />
+                Featured Work
+              </p>
+              <h2>
+                <SplitHeading text="Built environments" />
+              </h2>
+              <p className="gallery__sub">
+                Spaces we help bring to market — from concept to keys-in-hand.
+              </p>
+            </Reveal>
+            <Reveal delay={0.2} className="gallery__meta">
+              <div className="gallery__meta-row">
+                <span className="gallery__meta-num">240+</span>
+                <span className="gallery__meta-label">Projects launched</span>
+              </div>
+              <div className="gallery__meta-row">
+                <span className="gallery__meta-num">12M</span>
+                <span className="gallery__meta-label">Sq ft visualized</span>
+              </div>
+              <div className="gallery__meta-row">
+                <span className="gallery__meta-num">38%</span>
+                <span className="gallery__meta-label">Faster close rate</span>
+              </div>
+            </Reveal>
+          </div>
+
           <div className="gallery__grid">
             {IMAGES.gallery.map((item, i) => {
               const speed = [0.55, -0.35, 0.4, -0.5][i % 4];
               const liftClass = i % 2 === 0 ? 'gallery__lift gallery__lift--up' : 'gallery__lift gallery__lift--down';
+              const tags = ['Residential', 'Interior', 'Mixed-use', 'Hospitality'];
               return (
-                <Reveal key={item.src} delay={i * 0.05}>
+                <Reveal key={item.src} delay={i * 0.06}>
                   <ParallaxLayer speed={speed} className="gallery__parallax">
                     <div className={liftClass}>
                       <motion.div
                         className="gallery__cell"
-                        whileHover={{ scale: 1.04, rotate: i % 2 === 0 ? -0.6 : 0.6 }}
+                        whileHover="hover"
+                        initial="rest"
+                        animate="rest"
                         transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                       >
                         <motion.div
                           className="gallery__zoom"
-                          whileHover={{ scale: 1.08 }}
-                          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                          variants={{ rest: { scale: 1 }, hover: { scale: 1.1 } }}
+                          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                         >
                           <SafeImage
                             src={item.src}
@@ -112,6 +165,26 @@ export default function App() {
                             fallback={item.fallback}
                           />
                         </motion.div>
+                        <motion.div
+                          className="gallery__veil"
+                          variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
+                          transition={{ duration: 0.35 }}
+                        />
+                        <span className="gallery__index">{String(i + 1).padStart(2, '0')}</span>
+                        <motion.div
+                          className="gallery__caption"
+                          variants={{
+                            rest: { y: 24, opacity: 0 },
+                            hover: { y: 0, opacity: 1 },
+                          }}
+                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                          <span className="gallery__tag">{tags[i % tags.length]}</span>
+                          <h3>{item.alt}</h3>
+                          <span className="gallery__view">
+                            View Project <i aria-hidden="true">→</i>
+                          </span>
+                        </motion.div>
                       </motion.div>
                     </div>
                   </ParallaxLayer>
@@ -119,69 +192,73 @@ export default function App() {
               );
             })}
           </div>
-        </section>
-      </Scene>
 
-      <Scene id="services" variant="dark">
-        <section className="panel panel--dark">
-          <Reveal>
-            <p className="panel__eyebrow">What we do</p>
-            <h2 className="panel__title">Tools that move every phase of the property lifecycle.</h2>
-          </Reveal>
-          <div className="service-grid">
-            {SERVICES.map((s, i) => (
-              <Reveal key={s.title} delay={i * 0.07}>
-                <motion.article
-                  className="service-card"
-                  whileHover={{ y: -12 }}
-                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <SafeImage src={s.src} alt={s.title} className="service-card__bg" fallback={s.fallback} />
-                  <motion.div
-                    className="service-card__shine"
-                    initial={{ x: '-100%' }}
-                    whileHover={{ x: '120%' }}
-                    transition={{ duration: 0.45 }}
-                  />
-                  <div className="service-card__inner">
-                    <h3>{s.title}</h3>
-                    <p>{s.desc}</p>
-                    <span className="service-card__link">Explore →</span>
-                  </div>
-                </motion.article>
-              </Reveal>
-            ))}
+          <div className="gallery__marquee" aria-hidden="true">
+            <motion.div
+              className="gallery__marquee-track"
+              animate={{ x: ['0%', '-50%'] }}
+              transition={{ duration: 32, repeat: Infinity, ease: 'linear' }}
+            >
+              {[...Array(2)].flatMap((_, copy) =>
+                ['Residential', 'Commercial', 'Mixed-use', 'Hospitality', 'Retail', 'Master-plan', 'Luxury'].map(
+                  (t, i) => (
+                    <span key={`${copy}-${i}`} className="gallery__marquee-item">
+                      <em>◆</em>
+                      {t}
+                    </span>
+                  ),
+                ),
+              )}
+            </motion.div>
           </div>
         </section>
       </Scene>
 
       <Scene id="about" variant="cream">
-        <section className="panel panel--cream about">
-          <ParallaxLayer speed={0.3} className="about__visual">
-            <SafeImage
-              src={IMAGES.about.src}
-              alt={IMAGES.about.alt}
-              className="about__img"
-              fallback={IMAGES.about.fallback}
-            />
-          </ParallaxLayer>
-          <Reveal className="about__copy">
-            <p className="about__eyebrow">Who we are</p>
-            <h2>
-              We build the tools behind <em>Real Estate Success.</em>
+        <AboutInteractive />
+      </Scene>
+
+      <Scene id="services" variant="dark">
+        <section className="our-service">
+          <div className="our-service__bg" aria-hidden="true" />
+          <Reveal>
+            <p className="panel__eyebrow our-service__eyebrow">Our Service</p>
+            <h2 className="our-service__heading">
+              Powering property success from <em>first sketch</em> to <em>final signature.</em>
             </h2>
-            <p>
-              At DreamSelector, we bring years of global experience to the forefront of property
-              management innovation. Over the past five years, our specialized software solutions have
-              played a key role in supporting the sale and rental of both new developments and existing
-              properties.
-            </p>
-            <p>
-              Driven by close collaboration with our clients and the dedication of our skilled
-              international team, we deliver tailor-made solutions that meet the unique needs of each
-              project — enhancing efficiency, visibility, and success in a competitive market.
-            </p>
           </Reveal>
+          <div className="our-service__grid">
+            <ParallaxLayer speed={0.18} className="our-service__col">
+              <Reveal delay={0.05}>
+                <p>
+                  Whether you’re building the future or closing the next big deal, DreamSelector is
+                  your all-in-one digital engine for smarter real estate operations.
+                </p>
+                <p>
+                  From concept to keys-in-hand, our platform helps developers and agents stay ahead
+                  with tools that accelerate sales, simplify leasing, and automate property
+                  management — so you can focus on growth.
+                </p>
+              </Reveal>
+            </ParallaxLayer>
+            <ParallaxLayer speed={-0.12} className="our-service__col">
+              <Reveal delay={0.12}>
+                <p>
+                  Designed for deal-makers and vision-builders, DreamSelector streamlines your entire
+                  workflow with intuitive features that drive results across every phase of the
+                  property lifecycle.
+                </p>
+                <div className="our-service__pitch">
+                  <p className="our-service__pitch-q">
+                    Ready to elevate your portfolio or boost your pipeline?
+                  </p>
+                  <p className="our-service__pitch-a">
+                    Let’s make it happen — <em>faster, smoother, smarter.</em>
+                  </p>
+                </div>
+              </Reveal>
+            </ParallaxLayer>
+          </div>
         </section>
       </Scene>
 
@@ -189,9 +266,9 @@ export default function App() {
         <section className="panel panel--cases">
           <Reveal>
             <p className="panel__eyebrow panel__eyebrow--light">Client Reviews</p>
-            <h2 className="panel__title">Read reviews from trusted clients.</h2>
+            <h2 className="panel__title panel__title--dark">Read reviews from trusted clients.</h2>
           </Reveal>
-          <div className="cases-grid cases-grid--reviews">
+          <div className="cases-grid cases-grid--reviews cases-grid--four">
             {CASES.map((c, i) => (
               <Reveal key={c.title} delay={i * 0.06}>
                 <motion.article
@@ -249,7 +326,7 @@ export default function App() {
               transition={{ duration: 0.5 }}
             >
               <i />
-              Let's make your next project a success
+              Let’s make your next project a success
               <i />
             </motion.p>
             <motion.h2
@@ -268,35 +345,108 @@ export default function App() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.15 }}
             >
-              Whether you're launching a new development or managing a growing portfolio, DreamSelector
+              Whether you’re launching a new development or managing a growing portfolio, DreamSelector
               gives you the tools to move faster, sell smarter, and stay in control. From pre-build
-              visualization to final signatures — we're ready to help you simplify the journey and close
-              with confidence.
+              visualization to final signatures — we’re ready to help you simplify the journey and
+              close with confidence.
             </motion.p>
-            <motion.div
-              className="contact__actions"
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.25 }}
+          </Reveal>
+
+          <motion.div
+            className="contact-form"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="contact-form__intro">
+              <h3 className="contact-form__heading">
+                Ready to bring your <em>vision to life?</em>
+              </h3>
+              <p className="contact-form__sub">
+                Request a free quote or explore how we can shape your project together. Get in touch
+                today for a complimentary consultation.
+              </p>
+              <svg
+                className="contact-form__arrow"
+                viewBox="0 0 200 220"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <motion.path
+                  d="M20 30 C 80 30, 140 70, 90 110 C 50 140, 110 160, 160 180"
+                  stroke="#c45c3e"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  fill="none"
+                  initial={{ pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.8, ease: 'easeInOut', delay: 0.4 }}
+                />
+                <motion.path
+                  d="M160 180 L 148 168 M160 180 L 148 192"
+                  stroke="#c45c3e"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  fill="none"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: 2.1 }}
+                />
+              </svg>
+            </div>
+
+            <form
+              className="contact-form__fields"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const data = new FormData(e.currentTarget);
+                const subject = encodeURIComponent('New enquiry from ' + (data.get('name') || 'website'));
+                const body = encodeURIComponent(
+                  `Name: ${data.get('name')}\nEmail: ${data.get('email')}\nPhone: ${data.get('phone')}\n\n${data.get('message')}`,
+                );
+                window.location.href = `mailto:hello@dreamselector.com?subject=${subject}&body=${body}`;
+              }}
             >
-              <motion.a
-                href="mailto:hello@dreamselector.com"
-                className="contact__btn"
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
+              <label className="contact-field">
+                <input type="text" name="name" required placeholder=" " autoComplete="name" />
+                <span>Your Name *</span>
+              </label>
+              <label className="contact-field">
+                <input type="email" name="email" required placeholder=" " autoComplete="email" />
+                <span>Email Address *</span>
+              </label>
+              <label className="contact-field">
+                <input type="tel" name="phone" required placeholder=" " autoComplete="tel" />
+                <span>Phone Number *</span>
+              </label>
+              <label className="contact-field contact-field--area">
+                <textarea name="message" required placeholder=" " rows={5} />
+                <span>How can we help you? *</span>
+              </label>
+              <motion.button
+                type="submit"
+                className="contact-form__submit"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.18 }}
               >
-                <span>Send Message</span>
-                <b>→</b>
-              </motion.a>
-              <a href="mailto:hello@dreamselector.com" className="contact__mail">
-                hello@dreamselector.com
-              </a>
-            </motion.div>
-          </Reveal>
+                Send Message
+              </motion.button>
+              <p className="contact-form__privacy">
+                <span aria-hidden="true">🔒</span> Privacy Guaranteed
+              </p>
+            </form>
+          </motion.div>
         </section>
       </Scene>
+
+      <footer className="footer">
+        <p>Copyright {new Date().getFullYear()} DreamSelector | All rights reserved.</p>
+      </footer>
     </div>
   );
 }

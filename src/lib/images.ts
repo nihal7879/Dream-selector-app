@@ -29,36 +29,41 @@ export const IMAGES = {
   ],
   services: [
     {
-      src: u('1600585154340-be6161a56a0c', 1400, 900),
-      alt: '3D property visualization',
-      fallback: 'linear-gradient(160deg,#1e2a36,#3d5a6e)',
+      src: u('1564540583246-934409427776', 2400, 1500),
+      alt: 'Architect drafting plans',
+      fallback: 'linear-gradient(160deg,#1a2838 0%,#3d5a6e 50%,#1e3344 100%)',
     },
     {
-      src: u('1560518883-ce09059eeffa', 1400, 900),
-      alt: 'Real estate sales',
-      fallback: 'linear-gradient(160deg,#2a2218,#5c4030)',
+      src: u('1551836022-d5d88e9218df', 2400, 1500),
+      alt: 'Modern automated workspace',
+      fallback: 'linear-gradient(160deg,#2c1f18 0%,#7a4a32 50%,#3d2418 100%)',
     },
     {
-      src: u('1497366216548-37526070297c', 1400, 900),
-      alt: 'Developer office',
-      fallback: 'linear-gradient(160deg,#12141a,#2a2e38)',
+      src: u('1486325212027-8081e485255e', 2400, 1500),
+      alt: 'City skyline insights',
+      fallback: 'linear-gradient(160deg,#0d1218 0%,#2a3344 55%,#0a0e14 100%)',
     },
   ],
   cases: [
     {
-      src: u('1512917774080-9991f1c4c750', 1400, 1750),
-      alt: 'Harbor waterfront residences',
+      src: u('1500648767791-00dcc994a43e', 400, 400),
+      alt: 'Saul Goodman portrait',
       fallback: 'linear-gradient(180deg,#2a3d4a,#4a6270)',
     },
     {
-      src: u('1460317793731-4ccef5a2915c', 1400, 1750),
-      alt: 'Brickline apartment quarter',
+      src: u('1494790108377-be9c29b29330', 400, 400),
+      alt: 'Rebecca William portrait',
       fallback: 'linear-gradient(180deg,#4a3028,#7a5040)',
     },
     {
-      src: u('1600566753190-17f0baa2a6c3', 1400, 1750),
-      alt: 'Skyline terrace homes',
+      src: u('1507003211169-0a1dd7228f2d', 400, 400),
+      alt: 'Matt Brandon portrait',
       fallback: 'linear-gradient(180deg,#1a1c22,#3a3e48)',
+    },
+    {
+      src: u('1531427186611-ecfd6d936c79', 400, 400),
+      alt: 'Daniel portrait',
+      fallback: 'linear-gradient(180deg,#2c2f3a,#4a4f60)',
     },
   ],
   about: {

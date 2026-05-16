@@ -1,18 +1,44 @@
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const LINKS = [
-  { href: '#what-we-do', label: 'Home' },
+  { href: '#home', label: 'Home' },
   { href: '#about', label: 'Who We Are' },
-  { href: '#services', label: 'Our Service' },
+  { href: '#what-we-do', label: 'Our Service' },
   { href: '#cases', label: "Client's Speak" },
+  { href: '#contact', label: 'Contact Us' },
 ];
+
+const SECTION_IDS = LINKS.map((l) => l.href.replace('#', ''));
 
 export default function Navbar() {
   const { scrollY } = useScroll();
   const [y, setY] = useState(0);
+  const [active, setActive] = useState<string>('home');
 
   useMotionValueEvent(scrollY, 'change', (latest) => setY(latest));
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      {
+        rootMargin: '-40% 0px -50% 0px',
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      },
+    );
+
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const vh = typeof window !== 'undefined' ? window.innerHeight : 900;
   const glass = y > 40 && y < vh * 0.85;
@@ -20,6 +46,7 @@ export default function Navbar() {
 
   return (
     <motion.header
+      id="home"
       className={`nav ${glass ? 'nav--glass' : ''} ${solid ? 'nav--solid' : ''} ${y <= 40 ? 'nav--top' : ''}`}
       initial={false}
       animate={{
@@ -32,7 +59,7 @@ export default function Navbar() {
       }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
-      <motion.a href="#" className="nav__logo" whileHover={{ opacity: 0.9 }} transition={{ duration: 0.15 }}>
+      <motion.a href="#home" className="nav__logo" whileHover={{ opacity: 0.9 }} transition={{ duration: 0.15 }}>
         <span className="nav__mark" aria-hidden="true">
           <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M16 2L29 12L24 28H8L3 12L16 2Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
@@ -49,21 +76,30 @@ export default function Navbar() {
       </motion.a>
 
       <nav className="nav__links">
-        {LINKS.map((link, i) => (
-          <motion.a
-            key={link.href}
-            href={link.href}
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: 0.05 * i }}
-            whileHover={{ y: -2 }}
-          >
-            {link.label}
-          </motion.a>
-        ))}
-        <button type="button" className="nav__more hide-mobile" aria-label="More">
-          ···
-        </button>
+        {LINKS.map((link, i) => {
+          const id = link.href.replace('#', '');
+          const isActive = active === id;
+          return (
+            <motion.a
+              key={link.href}
+              href={link.href}
+              className={`nav__link ${isActive ? 'is-active' : ''}`}
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.05 * i }}
+              whileHover={{ y: -2 }}
+            >
+              {link.label}
+              {isActive && (
+                <motion.span
+                  layoutId="nav-underline"
+                  className="nav__underline"
+                  transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                />
+              )}
+            </motion.a>
+          );
+        })}
         <motion.a
           href="#contact"
           className="nav__cta"
@@ -71,7 +107,7 @@ export default function Navbar() {
           whileTap={{ scale: 0.97 }}
           transition={{ duration: 0.15 }}
         >
-          Connect Today →
+          Connect Today <span aria-hidden="true">→</span>
         </motion.a>
       </nav>
 
