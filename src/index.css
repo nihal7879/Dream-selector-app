@@ -25,6 +25,101 @@ body {
   overflow-x: hidden;
 }
 
+/* ── Native scrollbar fully hidden — we render a custom floating thumb ── */
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  display: none !important;
+}
+
+body {
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+}
+
+/* ── Custom floating scrollbar (premium) ── */
+.scrollbar-rail {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 200;
+  pointer-events: none;
+}
+
+.scrollbar-thumb {
+  position: absolute;
+  right: 0;
+  width: 3px;
+  border-radius: 999px 0 0 999px;
+  pointer-events: auto;
+  cursor: grab;
+  isolation: isolate;
+  will-change: transform, top, width, opacity;
+  transition: right 0.32s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.3s ease;
+}
+
+.scrollbar-thumb:active {
+  cursor: grabbing;
+}
+
+.scrollbar-thumb.is-hover {
+  right: 0;
+  border-radius: 999px 0 0 999px;
+}
+
+.scrollbar-thumb__core {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #f5d4c6 0%, #c45c3e 50%, #8a3f29 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.scrollbar-thumb__glow {
+  position: absolute;
+  inset: -6px -10px;
+  border-radius: 999px;
+  background: radial-gradient(ellipse at center, rgba(196, 92, 62, 0.55) 0%, transparent 70%);
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.35s ease, inset 0.35s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.scrollbar-thumb.is-active .scrollbar-thumb__glow,
+.scrollbar-thumb.is-hover .scrollbar-thumb__glow {
+  opacity: 1;
+}
+
+.scrollbar-thumb.is-hover .scrollbar-thumb__glow {
+  inset: -10px -16px;
+  background: radial-gradient(ellipse at center, rgba(217, 133, 106, 0.7) 0%, transparent 70%);
+}
+
+.scrollbar-thumb.is-hover .scrollbar-thumb__core {
+  background: linear-gradient(180deg, #f5d4c6 0%, #d9856a 50%, #c45c3e 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.32),
+    0 0 12px rgba(196, 92, 62, 0.45);
+}
+
+@media (max-width: 900px) {
+  .scrollbar-rail {
+    display: none !important;
+  }
+}
+
 /* ── Nav: adaptive glass → solid ── */
 .nav {
   position: fixed;
@@ -420,17 +515,7 @@ body {
 }
 
 .hero__slide-caption {
-  position: absolute;
-  right: clamp(24px, 5vw, 80px);
-  bottom: clamp(48px, 8vw, 80px);
-  z-index: 10;
-  margin: 0;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-  max-width: 200px;
-  text-align: right;
+  display: none !important;
 }
 
 .hero__slide {
@@ -508,33 +593,13 @@ body {
   pointer-events: none;
 }
 
-.hero__progress-track {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  z-index: 12;
-  background: rgba(255, 255, 255, 0.15);
-  transform-origin: left;
-}
-
+.hero__progress-track,
 .hero__progress-bar {
-  height: 100%;
-  width: 100%;
-  background: #fff;
-  transform-origin: left;
+  display: none !important;
 }
 
 .hero__dots {
-  position: absolute;
-  right: 60px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: none !important;
 }
 
 .hero__dot-btn {
@@ -590,15 +655,7 @@ body {
 }
 
 .hero__scroll-hint {
-  position: absolute;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  font-size: 11px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  display: none !important;
 }
 
 /* ── Vertical glass stack + parallax chips ── */
@@ -3118,7 +3175,7 @@ body {
 /* ── Contact ── */
 .contact {
   position: relative;
-  padding: clamp(96px, 14vw, 180px) clamp(24px, 6vw, 80px);
+  padding: clamp(72px, 10vw, 120px) clamp(24px, 6vw, 80px) clamp(40px, 5vw, 64px);
   background:
     radial-gradient(ellipse 80% 60% at 50% 100%, rgba(196, 92, 62, 0.18) 0%, transparent 60%),
     radial-gradient(ellipse 60% 50% at 50% 0%, rgba(196, 92, 62, 0.1) 0%, transparent 60%),
@@ -3544,13 +3601,18 @@ body {
   .hero__content {
     left: 20px !important;
     right: 20px !important;
-    top: 32% !important;
+    top: 36% !important;
     bottom: auto !important;
     max-width: none !important;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .hero__content .hero__btn {
+    margin-top: 4px;
+    align-self: flex-start;
   }
   .hero__text {
     font-size: clamp(22px, 5.4vw, 30px);
